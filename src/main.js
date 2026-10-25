@@ -29,9 +29,22 @@ const P=["/img/g00.jpg", "/img/g01.jpg", "/img/g02.jpg", "/img/g03.jpg", "/img/g
 const G=[20,14,16,0,17,15,21,1,3,2,4,18,19,9,5,6,8,7,10,11,12,13,22];
 const gl=$('#gl'),vw=$('#vw'),cols=[0,1].map(()=>{const c=document.createElement('div');c.className='gc';gl.append(c);return c});
 const go=new IntersectionObserver(es=>es.filter(e=>e.isIntersecting).sort((a,b)=>a.target.dataset.n-b.target.dataset.n).forEach((e,i)=>{e.target.style.transitionDelay=i*150+'ms';e.target.classList.add('on');go.unobserve(e.target)}),{threshold:.12});
-G.forEach((k,n)=>{const m=document.createElement('img');m.src=P[k];m.className='g';m.dataset.n=n;m.onclick=()=>{vw.innerHTML='';G.forEach(x=>{const e=document.createElement('img');e.src=P[x];vw.append(e)});vw.classList.add('on');vw.scrollLeft=n*innerWidth};cols[n%2].append(m);go.observe(m)});
+G.forEach((k,n)=>{const m=document.createElement('img');m.src=P[k];m.className='g';m.dataset.n=n;m.onclick=()=>openV(n);cols[n%2].append(m);go.observe(m)});
 $('#cd').style.setProperty('--bg','url('+P[17]+')');$('#ty').style.setProperty('--bg','url('+P[19]+')');
-vw.onclick=e=>{if(e.target===vw||e.target.tagName==='IMG'&&false)vw.classList.remove('on')};vw.addEventListener('dblclick',()=>vw.classList.remove('on'));
+// Full-screen viewer: swipe right-to-left for the next photo, tap X or the dark area to close
+const vs=document.createElement('div');vs.className='vs';
+vw.innerHTML='<button class="vx" aria-label="Close">✕</button><div class="vc"></div><button class="vp" aria-label="Previous">‹</button><button class="vn" aria-label="Next">›</button>';
+vw.prepend(vs);
+G.forEach(k=>{const s=document.createElement('div');s.className='sl';const i=document.createElement('img');i.src=P[k];i.draggable=false;i.alt='';s.append(i);vs.append(s)});
+const cnt=vw.querySelector('.vc');let cur=0;
+const upd=()=>{cur=Math.round(vs.scrollLeft/vs.clientWidth);cnt.textContent=(cur+1)+' / '+G.length};
+vs.addEventListener('scroll',upd,{passive:true});
+function openV(n){vw.classList.add('on');document.documentElement.style.overflow='hidden';vs.style.scrollBehavior='auto';vs.scrollLeft=n*vs.clientWidth;upd()}
+function closeV(){vw.classList.remove('on');document.documentElement.style.overflow=''}
+function step(d){vs.style.scrollBehavior='smooth';vs.scrollLeft=Math.max(0,Math.min(G.length-1,cur+d))*vs.clientWidth}
+vw.querySelector('.vx').onclick=closeV;vw.querySelector('.vp').onclick=()=>step(-1);vw.querySelector('.vn').onclick=()=>step(1);
+vs.onclick=e=>{if(e.target.tagName!=='IMG')closeV()};
+addEventListener('keydown',e=>{if(!vw.classList.contains('on'))return;if(e.key==='Escape')closeV();if(e.key==='ArrowRight')step(1);if(e.key==='ArrowLeft')step(-1)});
 $('#lg3').append($('#lt').content.cloneNode(true));
 const kn=n=>String(n).replace(/\d/g,d=>'០១២៣៤៥៦៧៨៩'[d]),T=new Date(wedding.dateISO);
 setInterval(()=>{let t=Math.max(0,T-Date.now())/1000|0;$('#d').textContent=kn(t/86400|0);$('#hh').textContent=kn(t%86400/3600|0);$('#m').textContent=kn(t%3600/60|0);$('#s').textContent=kn(t%60)},1000);
