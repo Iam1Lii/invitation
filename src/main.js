@@ -5,20 +5,17 @@ const $=s=>document.querySelector(s),sleep=ms=>new Promise(r=>setTimeout(r,ms));
 ['lg1','lg2'].forEach(i=>$('#'+i).append($('#lt').content.cloneNode(true)));
 $('#lg1').classList.add('mini');
 let busy=false;
-['lg4'].forEach(i=>{$('#'+i).append($('#lt').content.cloneNode(true));$('#'+i).classList.add('play')});
 const bfSvg='<svg viewBox="-20 -16 40 32"><use class="wl" href="#bw" fill="url(#gf)"/><use class="wr" href="#bw" fill="url(#gf)" transform="scale(-1 1)"/></svg>';
 function flutter(host,list){list.forEach(([x,y,s,d])=>{const e=document.createElement('div');e.className='bfl';e.style.cssText=`left:${x}%;top:${y}%;width:${s}px;animation-delay:${d}s`;e.innerHTML=bfSvg;host.append(e)})}
 flutter($('#gate'),[[8,26,30,0],[80,38,38,-5],[16,70,26,-9],[72,74,32,-3]]);flutter($('#cover .sh'),[[10,22,32,-2],[82,30,38,-7],[20,78,28,-11],[74,82,34,-4]]);
 async function openIt(){
- if(busy)return;busy=true;const S=$('#stage'),se=$('#seal'),fl=$('#flap'),cd=$('#card'),hd=$('#hand');
- hd.style.setProperty('--ty',-S.offsetHeight*1.2+'px');
+ if(busy)return;busy=true;const S=$('#stage'),se=$('#seal'),fl=$('#flap'),cd=$('#card');
  $('#hint').style.opacity=0;$('#tap').classList.add('gone');$('#wrap').classList.add('stop');startMusic();
- hd.classList.add('in');await sleep(1700);           // finger arrives at the seal
- hd.classList.add('press');se.classList.add('press');await sleep(700);
- hd.classList.remove('press');se.classList.remove('press');se.classList.add('lift');await sleep(1000);
+ await sleep(500);
+ se.classList.add('press');await sleep(700);
+ se.classList.remove('press');se.classList.add('lift');await sleep(1000);
  se.classList.add('away');await sleep(900);           // wax peels off
- fl.classList.add('open');hd.classList.add('pull');await sleep(1800);$('.flapw').style.zIndex=1;await sleep(1700);
- hd.classList.add('out');await sleep(500);
+ fl.classList.add('open');await sleep(1800);$('.flapw').style.zIndex=1;await sleep(1700);
  cd.classList.add('out');await sleep(1200);
  S.classList.add('drop');await sleep(850);
  cd.classList.add('cam');await sleep(700);
@@ -29,7 +26,7 @@ async function openIt(){
 }
 function reset(){
  const S=$('#stage');S.classList.remove('drop');['seal','flap','card'].forEach(i=>$('#'+i).className=i==='seal'?'seal':i);
- $('#hand').className.baseVal='hand';$('#tap').classList.remove('gone');
+ $('#tap').classList.remove('gone');
  $('.flapw').style.zIndex=4;$('#wrap').classList.remove('stop');$('#hint').style.opacity=1;
  $('#gate').style.display='grid';$('#cover').classList.remove('show');$('#rest').classList.remove('show');$('#rp').style.display='none';busy=false;
 }
