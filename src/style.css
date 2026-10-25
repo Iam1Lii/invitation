@@ -201,3 +201,12 @@ body{overflow-x:clip}
 #gate .tap{left:61%;top:46%}
 @media(prefers-reduced-motion:reduce){.nm .n,.nm .wl,.nm .wr{animation:none}}
 #gate .ff .nm .n{position:static;left:auto;top:auto;width:auto}
+/* ===== NO-CLIP PASS: padding for vowel signs/subscripts, taller reveal masks ===== */
+@keyframes rev{from{clip-path:inset(-150% 130% -150% -30%)}to{clip-path:inset(-150% -30% -150% -30%)}}
+.foil{padding:.6em .3em .55em}
+.logo .n{padding-block:.6em .55em;padding-inline:.35em}
+@media(max-height:420px){#cover .logo .n{padding-block:.5em .45em}}
+.nm .n{padding:.6em .45em;margin:-.5em 0;line-height:1.5}
+.nm .n1{font-size:15cqw}.nm .n2{font-size:12cqw}
+.nm .fl2{margin:0 0 -1cqw}
+.logo .n{margin-block:-.25em}
